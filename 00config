@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Stop unnecessary services
+sudo service apache2 stop
+sudo service cron stop
+sudo service lightdm stop
+sudo service xrdp stop
+sudo service avahi-daemon stop
+
+# Set processor frequency to 1GHz
+sudo cpufreq-set -g performance
+
+# Activate PRU hardware
+sudo sh -c "echo CHAMON-ARRAY > $SLOTS"
+
+# Allocate additional RAM for the PRUs
+# sudo rmmod uio_pruss
+# sudo modprobe uio_pruss extram_pool_sz=0x100000
