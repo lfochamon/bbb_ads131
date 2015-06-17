@@ -100,26 +100,26 @@
 
 .macro SPI_RX
 .mparam MSG_REG
-    SET SPI_SCLK              // SCLK = 1
+    SET SPI_SCLK                // SCLK = 1
     SPI_WAIT SPI_SCLK_DELAY, 1
     NOP
 
-    LBIT SPI_MISO, MSG_REG.t7 // Get input (bit 7)
+    LBIT SPI_MISO, MSG_REG.t7   // Get input (bit 7)
     SPI_RX_CLK SPI_CLOCK
-    LBIT SPI_MISO, MSG_REG.t6  // Get input (bit 6)
+    LBIT SPI_MISO, MSG_REG.t6   // Get input (bit 6)
     SPI_RX_CLK SPI_CLOCK
-    LBIT SPI_MISO, MSG_REG.t5  // Get input (bit 5)
+    LBIT SPI_MISO, MSG_REG.t5   // Get input (bit 5)
     SPI_RX_CLK SPI_CLOCK
-    LBIT SPI_MISO, MSG_REG.t4  // Get input (bit 4)
+    LBIT SPI_MISO, MSG_REG.t4   // Get input (bit 4)
     SPI_RX_CLK SPI_CLOCK
-    LBIT SPI_MISO, MSG_REG.t3  // Get input (bit 3)
+    LBIT SPI_MISO, MSG_REG.t3   // Get input (bit 3)
     SPI_RX_CLK SPI_CLOCK
-    LBIT SPI_MISO, MSG_REG.t2  // Get input (bit 2)
+    LBIT SPI_MISO, MSG_REG.t2   // Get input (bit 2)
     SPI_RX_CLK SPI_CLOCK
-    LBIT SPI_MISO, MSG_REG.t1  // Get input (bit 1)
+    LBIT SPI_MISO, MSG_REG.t1   // Get input (bit 1)
     SPI_RX_CLK SPI_CLOCK
-    LBIT SPI_MISO, MSG_REG.t0  // Get input (bit 0)
+    LBIT SPI_MISO, MSG_REG.t0   // Get input (bit 0)
 
-    CLR SPI_SCLK              // SCLK = 0
+    CLR SPI_SCLK                // SCLK = 0
     SPI_WAIT SPI_SCLK_DELAY
 .endm
