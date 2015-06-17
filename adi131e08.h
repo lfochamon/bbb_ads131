@@ -3,14 +3,17 @@
 /* Designed and tested for the BeagleBone Black                */
 /***************************************************************/
 
-/* Pin definitions */
-#define SPI_SCLK r30.t5 /* PRU1_5 GPIO2_11 P8_42 */
-#define SPI_MOSI r30.t0 /* PRU1_0 GPIO2_6  P8_45 */ /* DIN */
-#define SPI_MISO r31.t3 /* PRU1_3 GPIO2_9  P8_44 */ /* DOUT */
-#define SPI_CS   r30.t7 /* PRU1_7 GPIO2_13 P8_40 */
-#define START    r30.t4 /* PRU1_4 GPIO2_10 P8_41 */
-#define RESET    r30.t2 /* PRU1_2 GPIO2_8  P8_43 */
-#define DRDY     r31.t1 /* PRU1_1 GPIO2_7  P8_46 */
+#ifndef ADI_START
+  #error ADI_START pin undefined.
+#endif
+
+#ifndef ADI_RESET
+  #error ADI_RESET pin undefined.
+#endif
+
+#ifndef ADI_DRDY
+  #error ADI_DRDY pin undefined.
+#endif
 
 /* 50 ns < t_SCLK < (t_DR – 4 t_CLK) / (N_bits*N_channels + 24) */
 /* Using main clock @ 2.048 MHz:
@@ -25,5 +28,52 @@
 /* WARNING: For CLK @ 2.048 MHz: if the SCLK period is < 62 ns, then SCLK needs
  * to be bursty to meet t_SDECODE = 489 ns (not implemented) */
 
-/* SPI_SCLK_DELAY = floor( (t_SCLK / 5 ns) / 4 ) (SPI_SCLK_DELAY >= 3) */
-#define SPI_SCLK_DELAY 9
+#include "adi131_defs.h"
+#include "spi.h"
+
+/* Wait for 2*[N] instructions: [N]/1e5 ms */
+.macro ADI_WAIT
+.mparam N
+    MOV r0, N
+    SUB r0, r0, 1
+    DELAY:
+        SUB r0, r0, 1
+        QBNE DELAY, r0, 0
+.endm
+
+.macro ADI_STARTUP
+    /* RESET = 1, START = 0, CS = 1 */
+    SET ADI_RESET
+    CLR ADI_START
+    SET SPI_CS
+
+    ADI_WAIT 15*1000*1000   // Wait for 150 ms
+
+    /* Pulse RESET */
+    CLR ADI_RESET
+    ADI_WAIT 60             // Wait for 600 ns
+    SET ADI_RESET
+
+    ADI_WAIT 1000*1000      // Wait for 10 ms
+
+    /* Stop continuous data conversion mode */
+    CLR SPI_CS      // CS = 0
+    MOV r1.b0, SDATAC
+    SPI_TX r1.b0
+.endm
+
+.macro ADI_WRITE_REG
+.mparam reg_addr, data
+    MOV r1, WREG | reg_addr | data
+    SPI_TX r1.b2
+    SPI_TX r1.b1
+    SPI_TX r1.b0
+.endm
+
+.macro ADI_READ_REG
+.mparam reg_addr, reg_data
+    MOV r1, RREG | reg_addr
+    SPI_TX r1.b1
+    SPI_TX r1.b0
+    SPI_RX reg_data
+.endm
