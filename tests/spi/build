@@ -1,0 +1,3 @@
+#!/bin/bash
+pasm -b spi_test.asm
+gcc pru.c spi_test.c -o spi_test -lpthread -lprussdrv -O2
