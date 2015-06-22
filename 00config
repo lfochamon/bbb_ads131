@@ -12,7 +12,3 @@ sudo cpufreq-set -g performance
 
 # Activate PRU hardware
 sudo sh -c "echo CHAMON-ARRAY > $SLOTS"
-
-# Allocate additional RAM for the PRUs
-# sudo rmmod uio_pruss
-# sudo modprobe uio_pruss extram_pool_sz=0x100000
