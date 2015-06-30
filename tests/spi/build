@@ -1,3 +1,17 @@
 #!/bin/bash
-pasm -b spi_test.asm
+# Build and install device tree overlay
+# ../../00build_dto
+
+# Build PRU1 firmwares
+## Compile to object file
+clpru -v3 --symdebug:none -c spi_test.asm
+## Link (or in the case of a single file, assign sections to memory)
+clpru spi_test.obj -z bbb_pru.cmd --output_file=spi_test.out
+## Produce hex file from linked .out file
+hexpru bin_pru.cmd spi_test.out
+
+## Remove intermediary files
+rm spi_test.out spi_test.obj
+
+# Build main program
 gcc pru.c spi_test.c -o spi_test -lpthread -lprussdrv -O2
