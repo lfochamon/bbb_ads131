@@ -1,3 +1,0 @@
-#!/bin/bash
-dtc -O dtb -o CHAMON-ARRAY-00A0.dtbo -b 0 -@ CHAMON-ARRAY-00A0.dts
-sudo cp CHAMON-ARRAY-00A0.dtbo /lib/firmware

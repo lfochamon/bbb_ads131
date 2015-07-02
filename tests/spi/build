@@ -1,6 +1,6 @@
 #!/bin/bash
-# Build and install device tree overlay
-# ../../00build_dto
+# Build, install, and activate device tree overlay
+# ./build_dto
 
 # Build PRU1 firmwares
 ## Compile to object file

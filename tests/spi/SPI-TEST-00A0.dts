@@ -1,5 +1,5 @@
 /****************************************************/
-/* Device tree overlay for Chamon's mic array       */
+/* Device tree overlay for SPI library test         */
 /* WARNING! Disable HDMI before loading the overlay */
 /****************************************************/
 
@@ -8,9 +8,6 @@
 /* SPI_MOSI  PRU1_0  P8_45       0x0a0            5     OUTPUT */
 /* SPI_MISO  PRU1_3  P8_44       0x0ac            6     INPUT  */
 /* SPI_CS    PRU1_7  P8_40       0x0bc            5     OUTPUT */
-/* START     PRU1_4  P8_41       0x0b0            5     OUTPUT */
-/* RESET     PRU1_2  P8_43       0x0a8            5     OUTPUT */
-/* DRDY      PRU1_1  P8_46       0x0a4            6     INPUT  */
 
 /dts-v1/;
 /plugin/;
@@ -18,13 +15,12 @@
 / {
     compatible = "ti,beaglebone", "ti,beaglebone-black";
 
-    part-number = "CHAMON-ARRAY";
+    part-number = "SPI-TEST";
     version = "00A0";
 
     /* This overlay uses the following resources */
     exclusive-use =
-        "P8.40", "P8.41", "P8.42", "P8.43", "P8.44", "P8.45", "P8.46",
-        "pru0", "pru1";
+        "P8.40", "P8.42", "P8.44", "P8.45", "pru1";
 
     fragment@0 {
         target = <&am33xx_pinmux>;
@@ -33,13 +29,10 @@
 
             pru_pru_pins: pinmux_pru_pru_pins {   // PRU pin settings
                 pinctrl-single,pins = <
-                    0x0b4 0x05    /* PRU1_5, P8_40, MODE 5, OUTPUT */
+                    0x0b4 0x05    /* PRU1_5, P8_42, MODE 5, OUTPUT */
                     0x0a0 0x05    /* PRU1_0, P8_45, MODE 5, OUTPUT */
                     0x0ac 0x26    /* PRU1_3, P8_44, MODE 6, INPUT  */
                     0x0bc 0x05    /* PRU1_7, P8_40, MODE 5, OUTPUT */
-                    0x0b0 0x05    /* PRU1_4, P8_41, MODE 5, OUTPUT */
-                    0x0a8 0x05    /* PRU1_2, P8_43, MODE 5, OUTPUT */
-                    0x0a4 0x26    /* PRU1_1, P8_46, MODE 6, INPUT  */
                 >;
             };
         };
