@@ -1,5 +1,5 @@
 ;********************************************************
-; Defines for the ADI131E08 AFE IC from Texas Instrument
+; Defines for the ADS131E08 AFE IC from Texas Instrument
 ;********************************************************
 
 
