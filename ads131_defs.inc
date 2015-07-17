@@ -6,34 +6,32 @@
 ;*******************************
 ;***** Registers addresses *****
 ;*******************************
-; Note: register addresses are padded with 0x00 to make read/write commands
-; more straightforward.
 
 ; Device settings (read-only)
-ID          .set    0x0000
+ID          .set    0x00
 
 ; Global settings
-CONFIG1     .set    0x0100
-CONFIG2     .set    0x0200
-CONFIG3     .set    0x0300
-FAULT       .set    0x0400
+CONFIG1     .set    0x01
+CONFIG2     .set    0x02
+CONFIG3     .set    0x03
+FAULT       .set    0x04
 
 ; Channel settings
-CH1SET      .set    0x0500
-CH2SET      .set    0x0600
-CH3SET      .set    0x0700
-CH4SET      .set    0x0800
-CH5SET      .set    0x0900
-CH6SET      .set    0x0A00
-CH7SET      .set    0x0B00
-CH8SET      .set    0x0C00
+CH1SET      .set    0x05
+CH2SET      .set    0x06
+CH3SET      .set    0x07
+CH4SET      .set    0x08
+CH5SET      .set    0x09
+CH6SET      .set    0x0A
+CH7SET      .set    0x0B
+CH8SET      .set    0x0C
 
 ; Fault detect status registers (read-only)
-FAULT_STATP .set    0x1200
-FAULT_STATN .set    0x1300
+FAULT_STATP .set    0x12
+FAULT_STATN .set    0x13
 
 ; GPIOs
-GPIO        .set    0x1400
+GPIO        .set    0x14
 
 
 ;********************************
@@ -133,7 +131,7 @@ SDATAC          .set    0x11    ; Stop continuous data read mode
 RDATA           .set    0x12    ; Read data command
 
 ; Register Read Commands
-RREG            .set    0x2000  ; Read registers (0b001r rrrr 0b000n nnnn:
+RREG            .set    0x20    ; Read registers (0b001r rrrr 0b000n nnnn:
                                 ;       read n+1 registers starting at r)
-WREG            .set    0x4000  ; Write registers (0b010r rrrr 0b000n nnnn:
+WREG            .set    0x40    ; Write registers (0b010r rrrr 0b000n nnnn:
                                 ;       write n+1 registers starting at r)
