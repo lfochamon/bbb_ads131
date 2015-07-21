@@ -24,7 +24,7 @@
     .endif
 
     .if $defined(SPI_SCLK_DELAY) = 0
-        .emsg "SPI: You must define the SCLK frequency by assigning SPI_SCLK_DELAY."
+        .emsg "SPI: You must define the SCLK frequency using SPI_SCLK_DELAY."
     .endif
 
 
@@ -64,32 +64,32 @@ SPI_TX_CLK  .macro
 
 
 SPI_TX  .macro  spi_tx_reg
-            LBIT        spi_tx_reg, 7, r30, SPI_MOSI   ; Set output (bit 7)
+            LBIT        spi_tx_reg, 7, r30, SPI_MOSI    ; Set output (bit 7)
             SPI_TX_CLK
-            LBIT        spi_tx_reg, 6, r30, SPI_MOSI   ; Set output (bit 6)
+            LBIT        spi_tx_reg, 6, r30, SPI_MOSI    ; Set output (bit 6)
             SPI_TX_CLK
-            LBIT        spi_tx_reg, 5, r30, SPI_MOSI   ; Set output (bit 5)
+            LBIT        spi_tx_reg, 5, r30, SPI_MOSI    ; Set output (bit 5)
             SPI_TX_CLK
-            LBIT        spi_tx_reg, 4, r30, SPI_MOSI   ; Set output (bit 4)
+            LBIT        spi_tx_reg, 4, r30, SPI_MOSI    ; Set output (bit 4)
             SPI_TX_CLK
-            LBIT        spi_tx_reg, 3, r30, SPI_MOSI   ; Set output (bit 3)
+            LBIT        spi_tx_reg, 3, r30, SPI_MOSI    ; Set output (bit 3)
             SPI_TX_CLK
-            LBIT        spi_tx_reg, 2, r30, SPI_MOSI   ; Set output (bit 2)
+            LBIT        spi_tx_reg, 2, r30, SPI_MOSI    ; Set output (bit 2)
             SPI_TX_CLK
-            LBIT        spi_tx_reg, 1, r30, SPI_MOSI   ; Set output (bit 1)
+            LBIT        spi_tx_reg, 1, r30, SPI_MOSI    ; Set output (bit 1)
             SPI_TX_CLK
-            LBIT        spi_tx_reg, 0, r30, SPI_MOSI   ; Set output (bit 0)
+            LBIT        spi_tx_reg, 0, r30, SPI_MOSI    ; Set output (bit 0)
             SPI_TX_CLK
             NOP
 
-            CLR r30, r30, SPI_MOSI                  ; Reset output to low
+            CLR r30, r30, SPI_MOSI                      ; Reset output to low
         .endm
 
 
 SPI_RX_CLK  .macro
-                CLR         r30, r30, SPI_SCLK      ; SCLK = 0
+                CLR         r30, r30, SPI_SCLK          ; SCLK = 0
                 SPI_WAIT    SPI_SCLK_DELAY, 0
-                SET         r30, r30, SPI_SCLK      ; SCLK = 1
+                SET         r30, r30, SPI_SCLK          ; SCLK = 1
                 SPI_WAIT    SPI_SCLK_DELAY, 1
                 NOP
                 ; Room for one more instruction before SCLK = 1
@@ -97,7 +97,7 @@ SPI_RX_CLK  .macro
 
 
 SPI_RX      .macro  spi_rx_reg
-                SET         r30, r30, SPI_SCLK      ; SCLK = 1
+                SET         r30, r30, SPI_SCLK              ; SCLK = 1
                 SPI_WAIT    SPI_SCLK_DELAY, 1
                 NOP
 
@@ -117,6 +117,6 @@ SPI_RX      .macro  spi_rx_reg
                 SPI_RX_CLK
                 LBIT        r31, SPI_MISO, spi_rx_reg, 0    ; Get input (bit 0)
 
-                CLR         r30, r30, SPI_SCLK      ; SCLK = 0
+                CLR         r30, r30, SPI_SCLK              ; SCLK = 0
                 SPI_WAIT    SPI_SCLK_DELAY, 0
             .endm
