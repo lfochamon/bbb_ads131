@@ -117,21 +117,21 @@ GPIO_CTRL_1     .set    0x1     ; Control for GPIO1
 ;**** SPI commands *****
 ;***********************
 ; System commands
-WAKEUP          .set    0x02    ; Wake-up from standby mode
-STANDBY         .set    0x04    ; Enter standby mode
-RESET           .set    0x06    ; Reset the device
-START           .set    0x08    ; Start or restart (synchronize) conversions
-STOP            .set    0x0A    ; Stop conversion
-OFFSETCAL       .set    0x1A    ; Channel offset calibration
+ADS_WAKEUP          .set    0x02    ; Wake-up from standby mode
+ADS_STANDBY         .set    0x04    ; Enter standby mode
+ADS_RESET           .set    0x06    ; Reset the device
+ADS_START           .set    0x08    ; Start or restart (synchronize) conversions
+ADS_STOP            .set    0x0A    ; Stop conversion
+ADS_OFFSETCAL       .set    0x1A    ; Channel offset calibration
 
 ; Data read commands
-RDATAC          .set    0x10    ; Enable continuous data read mode
-                                ;       (default at power-up)
-SDATAC          .set    0x11    ; Stop continuous data read mode
-RDATA           .set    0x12    ; Read data command
+ADS_RDATAC          .set    0x10    ; Enable continuous data read mode
+                                    ;       (default at power-up)
+ADS_SDATAC          .set    0x11    ; Stop continuous data read mode
+ADS_RDATA           .set    0x12    ; Read data command
 
 ; Register Read Commands
-RREG            .set    0x20    ; Read registers (0b001r rrrr 0b000n nnnn:
-                                ;       read n+1 registers starting at r)
-WREG            .set    0x40    ; Write registers (0b010r rrrr 0b000n nnnn:
-                                ;       write n+1 registers starting at r)
+ADS_RREG            .set    0x20    ; Read registers (0b001r rrrr 0b000n nnnn:
+                                    ;       read n+1 registers starting at r)
+ADS_WREG            .set    0x40    ; Write registers (0b010r rrrr 0b000n nnnn:
+                                    ;       write n+1 registers starting at r)
