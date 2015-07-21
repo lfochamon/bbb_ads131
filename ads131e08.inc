@@ -44,26 +44,27 @@ delay?:         SUB     r28, r28, 1
 
 ADS_STARTUP .macro
                 ; RESET = 1, START = 0, CS = 1
-                SET             r30, r30, ADS_RESET
-                CLR             r30, r30, ADS_START
+                SET             r30, r30, ADS_CMD_RESET
+                CLR             r30, r30, ADS_CMD_START
                 SET             r30, r30, SPI_CS
 
                 ADS_WAIT        15*1000*1000        ; Wait for 150 ms
 
                 ; Pulse RESET
-                CLR             r30, r30, ADS_RESET
+                CLR             r30, r30, ADS_CMD_RESET
                 ADS_WAIT        60                  ; Wait for 600 ns
-                SET             r30, r30, ADS_RESET
+                SET             r30, r30, ADS_CMD_RESET
 
                 ADS_WAIT        1000*1000           ; Wait for 10 ms
 
                 ; Stop continuous data conversion mode
-                ADS_SEND_CMD    ADS_SDATAC
+                ADS_SEND_CMD    ADS_CMD_SDATAC
             .endm
 
 ADS_SEND_CMD    .macro  ads_send_cmd_command
                     CLR         r30, r30, SPI_CS                ; CS = 0
-                    NOP         ; Meet t_CSSC (> 6ns after CS = 0)
+                    ; Meets t_CSSC (> 6ns after CS = 0): 2 instructions
+                    ; before entering SPI_TX function
 
                     LDI         r28.b0, ads_send_cmd_command
                     JAL         r28.w2, spi_tx_call             ; Call SPI_TX
@@ -78,9 +79,10 @@ ADS_SEND_CMD    .macro  ads_send_cmd_command
 
 ADS_WRITE_REG   .macro  ads_write_reg_addr, ads_write_reg_data
                     CLR         r30, r30, SPI_CS                ; CS = 0
-                    NOP         ; Meet t_CSSC (> 6ns after CS = 0)
+                    ; Meets t_CSSC (> 6ns after CS = 0): 2 instructions
+                    ; before entering SPI_TX function
 
-                    LDI         r28.b0, ADS_WREG + ads_write_reg_addr
+                    LDI         r28.b0, ADS_CMD_WREG + ads_write_reg_addr
                     JAL         r28.w2, spi_tx_call             ; Call SPI_TX
                     LDI         r28.b0, 0
                     JAL         r28.w2, spi_tx_call             ; Call SPI_TX
@@ -98,9 +100,10 @@ ADS_WRITE_REG   .macro  ads_write_reg_addr, ads_write_reg_data
 
 ADS_READ_REG    .macro  ads_read_reg_addr, ads_read_reg_data
                     CLR         r30, r30, SPI_CS                ; CS = 0
-                    NOP         ; Meet t_CSSC (> 6ns after CS = 0)
+                    ; Meets t_CSSC (> 6ns after CS = 0): 2 instructions
+                    ; before entering SPI_TX function
 
-                    LDI         r28.b0, ADS_RREG + ads_read_reg_addr
+                    LDI         r28.b0, ADS_CMD_RREG + ads_read_reg_addr
                     JAL         r28.w2, spi_tx_call             ; Call SPI_TX
                     LDI         r28.b0, 0
                     JAL         r28.w2, spi_tx_call             ; Call SPI_TX
@@ -124,7 +127,8 @@ ADS_GET_DATA16  .macro  ads_get_data16_reg1, ads_get_data16_reg2, ads_get_data16
                     WBC     r31, ADS_DRDY
 
                     CLR     r30, r30, SPI_CS                    ; CS = 0
-                    NOP     ; Meet t_CSSC (> 6ns after CS = 0)
+                    ; Meets t_CSSC (> 6ns after CS = 0): 2 instructions
+                    ; before entering SPI_TX function
 
                     ; Receive STAT packet (24 bits)
                     JAL     r28.w2, spi_rx_call                 ; Call SPI_RX
@@ -192,10 +196,11 @@ ADS_GET_DATA16  .macro  ads_get_data16_reg1, ads_get_data16_reg2, ads_get_data16
 
 ADS_READ_ALL    .macro  ads_read_all_id, ads_read_all_config1, ads_read_all_config2, ads_read_all_config3, ads_read_all_fault, ads_read_all_ch1set, ads_read_all_ch2set, ads_read_all_ch3set, ads_read_all_ch4set, ads_read_all_ch5set, ads_read_all_ch6set, ads_read_all_ch7set, ads_read_all_ch8set, ads_read_all_fault_statp, ads_read_all_fault_statn, ads_read_all_gpio
                     CLR     r30, r30, SPI_CS                    ; CS = 0
-                    NOP     ; Meet t_CSSC (> 6ns after CS = 0)
+                    ; Meets t_CSSC (> 6ns after CS = 0): 2 instructions
+                    ; before entering SPI_TX function
 
                     ; Read 16 registers starting at ID (0x0)
-                    LDI     r28.b0, ADS_RREG + ID
+                    LDI     r28.b0, ADS_CMD_RREG + ID
                     JAL     r28.w2, spi_tx_call                 ; Call SPI_TX
                     LDI     r28.b0, 0x0F
                     JAL     r28.w2, spi_tx_call                 ; Call SPI_TX
